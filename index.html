@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full-Screen YouTube Video</title>
+    <title>Full-Screen YouTube Video with Mute Button</title>
     <style>
         * {
             margin: 0;
@@ -39,7 +39,34 @@
             top: 0;
             object-fit: cover; /* 화면을 꽉 채우도록 설정 */
             z-index: 1;
-            pointer-events: none; /* 터치 이벤트를 차단하여 위의 요소가 터치를 받도록 설정 */
+        }
+
+        /* 음소거 버튼 위치와 디자인 */
+        #muteButton {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: 40px;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.5); /* 약간의 투명한 배경 */
+            border-radius: 20px; /* 둥글게 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        #muteicon, #unmuteicon {
+            font-size: 20px; /* 아이콘 크기 */
+            margin-right: 5px; /* 텍스트와의 간격 */
+        }
+
+        #muteButton span {
+            font-size: 14px; /* 텍스트 크기 */
         }
     </style>
 </head>
@@ -49,20 +76,70 @@
     <div class="shorts-container">
         <iframe id="youtube-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
+
+    <!-- Mute/Unmute 버튼 -->
+    <div id="muteButton">
+        <i id="muteicon" class="material-icons-outlined" style="display: inline-block;">volume_off</i>
+        <i id="unmuteicon" class="material-icons-outlined" style="display: none;">volume_up</i>
+        <span id="muteText">소리 켜기</span>
+    </div>
 </div>
 
 <script>
+    // 여러 플레이리스트 목록
     var playlists = [
-        'PLOF1R5ilnXkilMCC7p4x6ZHoKtsaMaGMV&si=w2kppA1pJD4T4Rwp',
-        'PLOF1R5ilnXkhKUlxjicm76Hhzka3Ih96u&si=i-KqCuaDpSMurjou'
+        'PLOF1R5ilnXkilMCC7p4x6ZHoKtsaMaGMV',
+        'PLOF1R5ilnXkhKUlxjicm76Hhzka3Ih96u'
     ];
 
+    // 랜덤하게 플레이리스트 선택
     var randomIndex = Math.floor(Math.random() * playlists.length);
     var selectedPlaylist = playlists[randomIndex];
 
     // 선택된 플레이리스트를 iframe의 src에 설정
     var iframe = document.getElementById('youtube-iframe');
-    iframe.src = `https://www.youtube.com/embed/videoseries?list=${selectedPlaylist}&autoplay=1&mute=1&enablejsapi=1`;
+    iframe.src = `https://www.youtube.com/embed/videoseries?list=${selectedPlaylist}&autoplay=1&mute=1&controls=0&enablejsapi=1`;
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-iframe', {
+            events: {
+                'onReady': onPlayerReady
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        player.mute(); // 처음 시작할 때 음소거 상태로 설정
+    }
+
+    // 음소거 버튼 제어
+    var isMuted = true;
+    var muteButton = document.getElementById('muteButton');
+    var muteIcon = document.getElementById('muteicon');
+    var unmuteIcon = document.getElementById('unmuteicon');
+    var muteText = document.getElementById('muteText');
+
+    muteButton.addEventListener('click', function() {
+        if (isMuted) {
+            player.unMute();
+            muteIcon.style.display = "none";
+            unmuteIcon.style.display = "inline-block";
+            muteText.textContent = "소리 끄기";
+        } else {
+            player.mute();
+            muteIcon.style.display = "inline-block";
+            unmuteIcon.style.display = "none";
+            muteText.textContent = "소리 켜기";
+        }
+        isMuted = !isMuted;
+    });
+
+    // 유튜브 IFrame API를 비동기로 로드
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 </script>
 
 </body>
