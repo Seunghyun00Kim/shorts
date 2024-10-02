@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random YouTube Playlist with Swipe and Mute Button</title>
+    <title>Random YouTube Playlist with Mute Button</title>
+    
+    <!-- Material Icons 추가 -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -38,7 +42,6 @@
             top: 0;
             object-fit: cover;
             z-index: 1;
-            pointer-events: none;
         }
 
         /* 음소거 버튼 위치와 디자인 */
@@ -69,8 +72,8 @@
         #progressBarContainer {
             position: absolute;
             top: 0;
-            left: 0;
-            width: 100%;
+            left: 4%;
+            width: 92%;
             height: 5px;
             background-color: rgba(255, 255, 255, 0.3);
             z-index: 10;
@@ -97,7 +100,7 @@
 
     <!-- 음소거/해제 버튼 -->
     <div id="muteButton">
-        <i id="muteicon" class="material-icons-outlined" style="display: inline-block;">volume_off</i>
+        <i id="muteicon" class="material-icons-outlined">volume_off</i>
         <i id="unmuteicon" class="material-icons-outlined" style="display: none;">volume_up</i>
         <span id="muteText">소리 켜기</span>
     </div>
@@ -182,3 +185,4 @@
 
 </body>
 </html>
+
