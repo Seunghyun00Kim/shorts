@@ -20,11 +20,11 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 100vw;
             width: 100%;
+            height: 100vh;
             margin: 0 auto;
             position: relative;
-            height: 100vh;
             overflow: hidden; /* 스크롤 막기 */
             pointer-events: none; /* 전체 터치를 막기 */
         }
@@ -37,12 +37,14 @@
 
         .shorts-container iframe {
             position: absolute;
+            top: 50%;
+            left: 50%;
             width: 100vw;
             height: 100vh;
-            left: 0;
-            top: 0;
+            transform: translate(-50%, -50%); /* 중앙 정렬 */
             object-fit: cover; /* 화면을 꽉 채우도록 설정 */
             z-index: 1;
+            display: block;
         }
 
         /* 음소거 버튼 위치와 디자인 */
